@@ -1,0 +1,242 @@
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useForm } from "react-hook-form";
+// icons
+import { FaStar } from "react-icons/fa6";
+import { FaQuoteLeft } from "react-icons/fa";
+import { FaRegUser } from "react-icons/fa";
+import { MdOutlinePhoneInTalk } from "react-icons/md";
+// Ui comp
+import { Divider, Button, Inputs, StarRating } from "../components";
+// containers
+import { Spiner, ErrorPage, OrderForm } from "../containers";
+// custom hooks
+import useFetch from "../hooks/useFetch";
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  img: string;
+}
+
+const ProDetails = () => {
+  const { pathname } = useLocation();
+  const proName = pathname.split("/").pop();
+  const [pro, setPro] = useState<Product | undefined>();
+  const [isHouse, setIsHouse] = useState<boolean>(true);
+  const [rating, setRating] = useState(0);
+  const { data: products, loading, error } = useFetch(
+    `product/getByProductName/${proName}`,
+    "GET"
+  );
+  const { register, handleSubmit } = useForm();
+  useEffect(() => {
+    if (products) {
+      setPro(products.product);
+    }
+  }, [products]);
+
+  console.log("pro id :", pro?.id)
+
+  const title: string | undefined = pro?.name
+    ? pro.name
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ")
+    : undefined;
+
+  const [quantity, setQuantity] = useState(1);
+  const [total, setTotal] = useState(pro?.price);
+
+  const increment = () => setQuantity((prev) => prev + 1);
+  const decrement = () => setQuantity((prev) => (prev === 1 ? 1 : prev - 1));
+
+  useEffect(() => {
+    if (pro?.price) {
+      setTotal(quantity * pro.price);
+    }
+  }, [quantity, pro?.price]);
+
+  const onSubmit = async (data: any) => {
+    const order = {
+      productId: pro?.id,
+      username: data.username,
+      phoneNumber: data.phoneNumber,
+      quantity: quantity,
+      state: data.state,
+      city: isHouse ? data.city : "",
+      delevryType: isHouse ? "House" : "Office",
+      deleveryPrice: 500,
+      total: total ? total + total * 0.1 : 0,
+    };
+    console.log("order :", order)
+    try {
+      const response = await fetch("http://localhost:3001/api/v1/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(order),
+      });
+      const result = await response.json();
+      console.log("Order Success:", result);
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  };
+
+
+  const url = "http://localhost:3001/";
+  const img = JSON.parse(pro?.img || "[]")[0];
+  const img2 = JSON.parse(pro?.img || "[]")[1];
+
+  const toggleHouse = () => setIsHouse(!isHouse)
+
+
+  if (loading) return <Spiner />;
+  if (error) return <ErrorPage text={error} />;
+  return (
+    <main className="mx-5 md:mx-32 flex flex-col md:flex-row items-center md:items-start gap-3 my-10">
+      <div className="md:w-1/2 flex flex-col gap-y-5">
+        <img src={url + img} alt="Product 1" />
+        {img2 && <img src={url + img2} alt="Product 2" />}
+      </div>
+      <div className="md:w-1/2">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold text-black/95 dark:text-gray-100">{title}</h1>
+          <div className="flex text-black/95 dark:text-gray-200 text-base">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <p key={index}>
+                <FaStar />
+              </p>
+            ))}
+          </div>
+        </div>
+        <h1 className="text-lg text-gray-400 dark:text-gray-200 mt-4 mb-5">{pro?.price} dzd</h1>
+        <Divider />
+
+        <h1 className="text-lg text-gray-400 mt-4">
+          {pro?.desc}
+        </h1>
+        <Divider className="my-5" />
+
+        {pro?.desc && (
+          <>
+            <div className="flex items-center gap-2 text-black/95 dark:text-gray-200">
+              <FaQuoteLeft className="text-3xl" />
+              <h1 className="italic">
+                {pro?.desc}</h1>
+            </div>
+            <Divider className="my-5" />
+          </>
+        )}
+
+        <div className="flex items-center justify-between">
+          <h1 className="text-gray-400 text-xl">No.Of Orders </h1>
+
+          {/* count */}
+          <div className="flex items-center">
+            <button
+              onClick={increment}
+              type="button"
+              className="text-lg border rounded-tl rounded-bl p-2 w-8 cursor-pointer hover:bg-black hover:text-white duration-300 dark:bg-gray-100 dark:text-gray-900"
+            >
+              +
+            </button>
+            <p className="text-lg border p-2 w-12 grid place-content-center dark:bg-gray-100">{quantity}</p>
+            <button
+              onClick={decrement}
+              type="button"
+              className="text-lg border rounded-tr rounded-br p-2 w-8 cursor-pointer hover:bg-black hover:text-white duration-300 dark:bg-gray-100 dark:text-gray-900"
+            >
+              -
+            </button>
+          </div>
+        </div>
+        <Divider className="my-5" />
+        {/* total */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-gray-400 text-xl">Total: {total} DzD</h1>
+          <Button title="Order Now" className="hover:text-white hover:bg-black/95 duration-300 dark:bg-gray-100 dark:text-gray-900" />
+        </div>
+        <Divider className="my-5" />
+        {/* order form */}
+        <div className='w-full h-full border-dashed border-gray-500 border-2 px-5 pb-3 rounded-md'>
+          <div className='w-full flex flex-col items-center justify-center gap-y-1 my-4'>
+            <h1 className='text-xl font-semibold text-gray-800 dark:text-gray-200'>Order Now</h1>
+            <p className='text-gray-600 dark:text-gray-300 italic text-xs'>please fill the form below</p>
+          </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <Inputs type='text' placeholder='Name' icon={<FaRegUser />} {...register("username", { required: true })} />
+              <Inputs type='number' placeholder='Phone Number' icon={<MdOutlinePhoneInTalk />} {...register("phoneNumber", { required: true })} />
+            </div>
+            <div className='my-5'>
+              <Inputs type='number' placeholder='Phone Number' icon={<MdOutlinePhoneInTalk />} {...register("phoneNumber", { required: false })} />
+            </div>
+            <div className='my-5 grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <Inputs type='checkbox' placeholder='House' icon={<MdOutlinePhoneInTalk />} id='house' checked={isHouse} onChange={toggleHouse}  {...register("username"), {}} />
+              <Inputs type='checkbox' placeholder='Office' icon={<MdOutlinePhoneInTalk />} id='office' checked={!isHouse} onChange={toggleHouse} {...register("username"), {}} />
+            </div>
+            <div className='my-5 grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <Inputs type='select'>
+                <option value="">Select State</option>
+              </Inputs>
+              {
+                isHouse && <Inputs type='select' >
+                  <option value="">Select City</option>
+                </Inputs>
+              }
+            </div>
+            <div className="grid grid-cols-2">
+              <div className="flex items-center">
+                <button
+                  onClick={increment}
+                  type="button"
+                  className="text-lg border rounded-tl rounded-bl p-2 w-8 cursor-pointer hover:bg-black hover:text-white duration-300 dark:bg-gray-100 dark:text-gray-900"
+                >
+                  +
+                </button>
+                <p className="text-lg border p-2 w-12 grid place-content-center dark:bg-gray-100">{quantity}</p>
+                <button
+                  onClick={decrement}
+                  type="button"
+                  className="text-lg border rounded-tr rounded-br p-2 w-8 cursor-pointer hover:bg-black hover:text-white duration-300 dark:bg-gray-100 dark:text-gray-900"
+                >
+                  -
+                </button>
+              </div>
+              <div>
+                <h1 className="text-gray-800 dark:text-gray-200">product price: {total}</h1>
+                <h1 className="text-gray-800 dark:text-gray-200">delevery price: {total}</h1>
+                <h1 className="text-gray-800 dark:text-gray-200">Total price: {total * 5}</h1>
+              </div>
+            </div>
+            <Button title="Order Now" className="hover:text-white hover:bg-black/95 duration-300 dark:bg-gray-100 dark:text-gray-900 w-full rounded-full my-5" />
+          </form>
+        </div>
+        <Divider className="my-5" />
+        {/* rates */}
+        <h1 className="text-xl font-semibold text-gray-400 dark:text-gray-200"></h1>
+        <section className="border-dashed border-2 border-gray-500 p-3 rounded-md">
+          <h1 className="text-gray-400 text-xl mb-5">Please Rate This Product😊:</h1>
+          <div className="flex flex-col gap-y-3">
+            <div className="grid grid-cols-2 place-content-center gap-x-10">
+              <Inputs type="text" placeholder="Name" icon={<FaRegUser />} />
+
+              <div className="flex gap-3">
+                <StarRating rating={rating} setRating={setRating} />
+                <p className="text-gray-400 text-sm">Rating: {rating} {rating == 1 ? "😡" : rating == 2 ? "😐" : rating == 3 ? "🙄" : rating == 4 ? "😊" : "🤩"}</p>
+              </div>
+            </div>
+            <Inputs type="textarea" placeholder="Write your review" />
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+};
+
+export default ProDetails;

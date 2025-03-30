@@ -1,0 +1,81 @@
+{
+    "common": {
+        "home": "Home",
+        "about": "About",
+        "contact": "Contact"
+    },
+    "home": {
+        "title": "Home",
+        "description": "Description"
+    },
+    "about": {
+        "title": "About",
+        "description": "Description"
+    },
+    "dashboard": {
+        "message": "Welcome",
+        "title": "Dashboard",
+        "description": "Description",
+        "links":{
+            "dashboard": "dashboard",
+            "products": "products",
+            "categories": "categories",
+            "orders": "orders",
+            "logout": "logout"
+        },
+        "page":{
+            "dashboard":{
+                "staticsCard":{
+                    "first": {
+                        "title": "Total Sale",
+                    },
+                    "second": {
+                        "title": "Total Order",
+                    },
+                    "third": {
+                        "title": "Total Profit",
+                    }
+                },
+                "linStatic":{
+                    "title": "Profit",
+                },
+                "sircleStatic":{
+                    "title": "Order Statistics",
+                    "valid": "Valide",
+                    "invalid": "Invalide",
+                },
+                "table": {
+                    "title": "Top Selling Products",
+                    "tHead": {
+                        "image": "Image",
+                        "name": "Name",
+                        "category": "Category",
+                        "quantity": "Quantity",
+                        "price": "Price"
+                    }
+                }
+            },
+            "products":{
+                "table": {
+                    "title": "Products",
+                    "tHead": {
+                        "image": "Image",
+                        "name": "Name",
+                        "category": "Category",
+                        "quantity": "Quantity",
+                        "price": "Price"
+                    }
+                }
+            },
+            "categories":{
+                "table": {
+                    "title": "Categories",
+                    "tHead": {    
+                        "name": "Name",
+                        "quantity": "Quantity"
+                    }
+                }
+            }
+        }
+    }
+}

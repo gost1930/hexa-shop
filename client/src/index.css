@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+:root{
+    --black: #2a2a2a;
+}
+
+
+.text-black{
+    color:var(--black);
+}
+
+.bg-black{
+    background-color: var(--black) ;
+}
+
+.border-black{
+    border: var(--black) ;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+
+::-webkit-scrollbar-track {
+    border: rgb(235, 235, 235) 1px solid;     
+}
+  
+::-webkit-scrollbar-thumb {
+    background: rgb(212, 212, 212);
+  }
+
+.table-scroll-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+.inputSkeleton{
+    background: linear-gradient(90deg, #dfdfdf 25%, #cccccc 50%, #dfdfdf 75%);
+    background-size: 400% 100%;
+    animation: gradient 1.5s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
