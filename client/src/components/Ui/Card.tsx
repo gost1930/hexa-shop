@@ -6,6 +6,9 @@ import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom"
 // img
 import noImage from "../../assets/no-image.png";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../store/cartSlice";
+import { useEffect } from "react";
 
 interface Props {
     name: string
@@ -13,13 +16,29 @@ interface Props {
     id: string,
     img: string
 }
-
 const Card: React.FC<Props> = ({ name, price, id, img }) => {
+    const dispatch = useDispatch();
+    const addToCartFunc = () => {
+        dispatch(addToCart({
+            id
+            , name
+            , img: `http://localhost:3001/${img}`
+            , price
+        }))
+    }
     const btns = [
-        { icon: <FaStar />, path: "/product/1", func: "" },
-        { icon: <FaCartShopping />, path: "/product/1", func: "" },
-        { icon: <FaRegEye />, path: `/product/${name?.replace(/ /g, "-") || 1}`, func: "" },
+        { icon: <FaStar />, path: "/product/1", func: () => { } },
+        { icon: <FaCartShopping />, path: "/product/1", func: addToCartFunc },
+        { icon: <FaRegEye />, path: `/product/${name?.replace(/ /g, "-") || 1}` },
     ];
+
+    const cartItems = useSelector((state: any) => state.cart?.cartItems || []);
+    useEffect(() => {
+        console.log("Updated cartItems:", cartItems);
+    }, [cartItems]); // سيتم الطباعة كلما تغيرت قيمة cartItems
+
+    
+
 
     return (
         <div className="flex flex-col group  min-h-[450px] h-[550px] m-1 overflow-hidden">
@@ -34,8 +53,10 @@ const Card: React.FC<Props> = ({ name, price, id, img }) => {
                 flex flex-col md:flex-row items-center gap-y-1 gap-x-4
                 ">
                     {
-                        btns.map(({ icon, path /* , func */ }, index) => (
-                            <Link to={path} key={index} className="grid text-xs palace-content-center rounded-full duration-500 bg-gray-100 p-2 md:p-4 cursor-pointer dark:bg-gray-900 dark:text-gray-100">{icon}</Link>
+                        btns.map(({ icon, path, func }, index) => (
+                            index !== 2 ? (
+                                <button onClick={func} key={index} className="grid text-xs palace-content-center rounded-full duration-500 bg-gray-100 p-2 md:p-4 cursor-pointer dark:bg-gray-900 dark:text-gray-100">{icon}</button>
+                            ) : <Link to={path} key={index} className="grid text-xs palace-content-center rounded-full duration-500 bg-gray-100 p-2 md:p-4 cursor-pointer dark:bg-gray-900 dark:text-gray-100">{icon}</Link>
                         ))
                     }
                 </div>
