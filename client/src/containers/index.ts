@@ -4,6 +4,7 @@ export { default as Spiner } from "./ErrorPages/Spiner";
 export { default as ErrorPage } from "./ErrorPages/ErrorPage";
 export { default as NoDataPage } from "./ErrorPages/NoDataPage";
 export { default as OrderForm } from "./OrderForm/OrderForm";
+export { default as Comments } from "./Comments/Comments";
 
 // admin containers
 export { default as SlideBar } from "./SlideBar/SlideBar";

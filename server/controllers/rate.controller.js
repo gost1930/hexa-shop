@@ -54,7 +54,22 @@ const getAllRate = async (req, res) => {
     }
 };
 
+const getRateByProductId = async (req, res) => {
+    const { productId } = req.params;
+    try {
+        const rates = await prisma.rate.findMany({
+            where: {
+                productId: productId
+            }
+        });
+        res.status(200).json(rates);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     addRate,
-    getAllRate
+    getAllRate,
+    getRateByProductId
 }

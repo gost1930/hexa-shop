@@ -9,7 +9,7 @@ import { MdOutlinePhoneInTalk } from "react-icons/md";
 // Ui comp
 import { Divider, Button, Inputs, StarRating } from "../components";
 // containers
-import { Spiner, ErrorPage, OrderForm } from "../containers";
+import { Spiner, ErrorPage, OrderForm, Comments } from "../containers";
 // custom hooks
 import useFetch from "../hooks/useFetch";
 import { Modal } from "../admin/components";
@@ -40,7 +40,6 @@ const ProDetails = () => {
     if (products) {
       setPro(products.product);
     }
-    successAlert("Rate added successfully")
   }, [products]);
 
   console.log("pro id :", pro?.id)
@@ -77,7 +76,7 @@ const ProDetails = () => {
       total: total ? total + total * 0.1 : 0,
     };
     try {
-      const response = await fetch("http://localhost:3001/api/v1/order", {
+      const response = await fetch(import.meta.env.VITE_API_UR + "order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -293,11 +292,11 @@ const ProDetails = () => {
             <Button title="Submit" className="hover:text-white hover:bg-black/95 duration-300 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-900 w-full rounded-full my-5" />
           </form>
         </section>
+        <Comments id={pro?.id ?? ""} />
       </div>
       {
         isOpen && <Modal isOpen={isOpen} onClose={onClose} insideClick={true} btnClose={true}>
           <div className="w-[33rem] md:min-w-[30rem] flex flex-col justify-center items-center p-5 pb-10 gap-4">
-
             <h1 className="text-2xl font-semibold text-gray-600 dark:text-gray-200 text-center">Order Success 🥰🎉</h1>
             <p className="dark:text-gray-300 text-gray-700 text-base">please rate this product if you like it or want to give feedback 😉</p>
             <p className="dark:text-gray-300 text-gray-700 text-base italic">if you have any questions, please <a href="" className="underline">contact us</a></p>
