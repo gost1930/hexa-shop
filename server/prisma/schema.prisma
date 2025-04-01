@@ -43,13 +43,13 @@ model Product {
   oldPrice   Float?
   desc       String?
   img        Json?
-  rate       Int?
   userId     String
   quantity   Float?
   user       User     @relation(fields: [userId], references: [id])
-  categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
   order      Order[]
+  rate       Rate[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -79,4 +79,13 @@ model Order {
   product       Product[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+}
+
+model Rate {
+  id        String  @id @default(cuid())
+  username  String
+  rate      Int
+  review    String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
 }

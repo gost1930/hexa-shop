@@ -16,9 +16,10 @@ interface InputsProps {
   defaultValue?: any;
   id?: string | number | undefined;
   checked?: boolean
+  onClick?: () => void
 }
 
-const Inputs: React.FC<InputsProps> = ({ type = "text", placeholder, onChange, className, icon, value, name, disabled, ref, children, defaultValue, id, checked }) => {
+const Inputs: React.FC<InputsProps> = ({ type = "text", placeholder, onChange, className, icon, value, name, disabled, ref, children, defaultValue, id, checked, onClick }) => {
   switch (type) {
     case "text":
     case "password":
@@ -113,6 +114,7 @@ const Inputs: React.FC<InputsProps> = ({ type = "text", placeholder, onChange, c
             type="checkbox"
             checked={checked}
             onChange={onChange}
+            onClick={onClick}
             className={clsx(
               "h-5 pl-9 rounded-md border outline-none",
               "bg-zinc-100 focus:bg-zinc-200 border-gray-300 text-gray-900",

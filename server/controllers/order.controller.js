@@ -56,10 +56,12 @@ const getOrderById = async (req, res) => {
 const createOrder = async (req, res) => {
     const { productId, quantity, username, state, city, phoneNumber, total, deleveryPrice, delevryType } = req.body;
 
-    if (!productId || !quantity || !username || !state || !city || !phoneNumber || !total || !deleveryPrice || !delevryType) {
+    if (!productId || !quantity || !username || !state || !phoneNumber || !total || !deleveryPrice || !delevryType) {
         return res.status(400).json({ message: "productId, quantity , username , state and city and phoneNumber and total and deleveryPrice and delevrryType are required" });
     }
-
+    if (delevryType.toLowerCase() === "house" && !city) {
+        return res.status(400).json({ message: "city is required" });
+    }
     try {
 
         const product = await prisma.product.findUnique({
@@ -102,7 +104,7 @@ const createOrder = async (req, res) => {
             }
         });
 
-        res.status(201).json(order);
+        res.status(201).json({success: true, message: "Order created successfully", order });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
