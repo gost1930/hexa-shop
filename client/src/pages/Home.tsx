@@ -3,7 +3,7 @@ import { Divider } from "../components";
 const Home = () => {
     return (
         <main className="min-h-screen dark:bg-gray-800">
-            <CategoryContainer name="Categories" />
+            <CategoryContainer />
             <CategorieSection
             type="mens" 
             title="Men's Latest" 
