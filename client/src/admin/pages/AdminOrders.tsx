@@ -17,7 +17,7 @@ const AdminOrders = () => {
         setIsOpenUpdate(true);
     };
 
-    const { data: orderData, loading: orderLoading, error: orderError } = useFetch(`order`, 'GET')
+    const { data: orderData, loading: orderLoading, error: orderError } = useFetch<Array[any]>(`order`, 'GET')
     console.log(orderData);
     const orders = orderData?.orders;
 

@@ -183,15 +183,23 @@ const getProductByName = async (req, res) => {
 const createProduct = async (req, res) => {
     console.log(req.files);
 
-    const { name, price, categoryId, userId, oldPrice, rate, quantity, desc } = req.body;
+    const { name, price, categoryId, userId, oldPrice, quantity, desc } = req.body;
 
     if (!req.files || req.files.length === 0) {
-        return res.status(400).json({ message: "الصور مطلوبة" });
+        return res.status(400).json({ message: "Please upload at least one image" });
     }
 
     const imgPaths = req.files.map(file => `uploads/${file.filename}`);
 
     try {
+        const proExist = await prisma.product.findUnique({
+            where: {
+                name: name
+            }
+        })
+        if (proExist) {
+            return res.status(400).json({ message: "Product already exists" });
+        }
         const product = await prisma.product.create({
             data: {
                 user: { connect: { id: userId } },
@@ -199,17 +207,16 @@ const createProduct = async (req, res) => {
                 price: +price,
                 category: { connect: { id: categoryId } },
                 oldPrice: +oldPrice,
-                rate: +rate,
                 quantity: +quantity,
                 desc,
                 img: JSON.stringify(imgPaths)
             }
         });
 
-        return res.status(201).json({ message: "تم إنشاء المنتج بنجاح", product });
+        return res.status(201).json({ message: "Product created successfully", product });
     } catch (error) {
-        console.error("خطأ أثناء إنشاء المنتج:", error);
-        return res.status(500).json({ message: "خطأ داخلي في السيرفر" });
+        console.error("Error:", error);
+        return res.status(500).json({ message: "Error creating product" });
     }
 };
 
@@ -217,9 +224,9 @@ const createProduct = async (req, res) => {
 
 const updateProductById = async (req, res) => {
     const { id } = req.params;
-    const { name, price, categoryId, userId, quantity , oldPrice} = req.body;
+    const { name, price, categoryId, userId, quantity, oldPrice } = req.body;
     const image = req.file ? "uploads/" + req.file.filename : null;
-    if(!id){
+    if (!id) {
         return res.status(400).json({ message: "Id is required" });
     }
     try {
@@ -229,8 +236,8 @@ const updateProductById = async (req, res) => {
             },
             data: {
                 name,
-                price : +price,
-                quantity : +quantity,
+                price: +price,
+                quantity: +quantity,
                 oldPrice: +oldPrice,
                 category: { connect: { id: categoryId } },
                 user: { connect: { id: userId } },

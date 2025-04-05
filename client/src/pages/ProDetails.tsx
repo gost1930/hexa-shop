@@ -27,14 +27,12 @@ const ProDetails = () => {
   const { pathname } = useLocation();
   const proName = pathname.split("/").pop();
   const [pro, setPro] = useState<Product | undefined>();
-  const [isHouse, setIsHouse] = useState<boolean>(true);
+  
   const [rating, setRating] = useState(0);
-  const { isOpen, setIsOpen, onClose } = useDisCloser();
   const { data: products, loading, error } = useFetch(
     `product/getByProductName/${proName}`,
     "GET"
   );
-  const { register, handleSubmit, formState: { errors } } = useForm();
   const { register: register2, handleSubmit: handleSubmit2, formState: { errors: errors2 }, reset: reset2 } = useForm();
   useEffect(() => {
     if (products) {
@@ -63,47 +61,14 @@ const ProDetails = () => {
     }
   }, [quantity, pro?.price]);
 
-  const onSubmit = async (data: any) => {
-    const order = {
-      productId: pro?.id,
-      username: data.username,
-      phoneNumber: data.phoneNumber,
-      quantity: quantity,
-      state: data.state ?? "ain defla",
-      city: isHouse ? data.city : "",
-      delevryType: isHouse ? "House" : "Office",
-      deleveryPrice: 500,
-      total: total ? total + total * 0.1 : 0,
-    };
-    try {
-      const response = await fetch(import.meta.env.VITE_API_UR + "order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(order),
-      });
-      const result = await response.json();
-      if (response.ok) {
-        setIsOpen(result.success);
-        console.log("Order :", result);
-
-      } else {
-        setIsOpen(false);
-      }
-    } catch (error) {
-      console.error("Error placing order:", error);
-
-    }
-  };
+  
 
 
   const url = "http://localhost:3001/";
   const img = JSON.parse(pro?.img || "[]")[0];
   const img2 = JSON.parse(pro?.img || "[]")[1];
 
-  const toggleHouse = () => setIsHouse(!isHouse)
+  
 
   // add Rate
   const addRate = async (data: any) => {
@@ -209,66 +174,16 @@ const ProDetails = () => {
             <h1 className='text-xl font-semibold text-gray-800 dark:text-gray-200'>Order Now</h1>
             <p className='text-gray-600 dark:text-gray-300 italic text-xs'>please fill the form below</p>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <div>
-                <Inputs type='text' placeholder='Name' icon={<FaRegUser />} {...register("username", { required: true })} />
-                {errors.username && <p className='text-red-500 text-sm'>name is required</p>}
-              </div>
-
-              <div>
-                <Inputs type='number' placeholder='Phone Number' icon={<MdOutlinePhoneInTalk />} {...register("phoneNumber", { required: true })} />
-                {errors.phoneNumber && <p className='text-red-500 text-sm'>phone is required</p>}
-              </div>
-            </div>
-            <div className='my-5'>
-              <Inputs type='number' placeholder='Phone Number' icon={<MdOutlinePhoneInTalk />} {...register("phoneNumber", { required: false })} />
-              {errors.phoneNumber && <p className='text-red-500 text-sm'>phone is required</p>}
-            </div>
-            <div className='my-5 grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <Inputs type='checkbox' placeholder='House' icon={<MdOutlinePhoneInTalk />} id='house' checked={isHouse} onClick={toggleHouse}  {...register("username", {})} />
-              <Inputs type='checkbox' placeholder='Office' icon={<MdOutlinePhoneInTalk />} id='office' checked={!isHouse} onClick={toggleHouse} {...register("username", {})} />
-            </div>
-            <div className='my-5 grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <Inputs type='select'>
-                <option value="">Select State</option>
-              </Inputs>
-              {
-                isHouse && <Inputs type='select' >
-                  <option value="">Select City</option>
-                </Inputs>
-              }
-            </div>
-            <div className="grid grid-cols-2">
-              <div className="flex items-center">
-                <button
-                  onClick={increment}
-                  type="button"
-                  className="text-lg border rounded-tl rounded-bl p-2 w-8 cursor-pointer hover:bg-black hover:text-white duration-300 dark:bg-gray-100 dark:text-gray-900"
-                >
-                  +
-                </button>
-                <p className="text-lg border p-2 w-12 grid place-content-center dark:bg-gray-100">{quantity}</p>
-                <button
-                  onClick={decrement}
-                  type="button"
-                  className="text-lg border rounded-tr rounded-br p-2 w-8 cursor-pointer hover:bg-black hover:text-white duration-300 dark:bg-gray-100 dark:text-gray-900"
-                >
-                  -
-                </button>
-              </div>
-              <div>
-                <h1 className="text-gray-800 dark:text-gray-200">product price: {total}</h1>
-                <h1 className="text-gray-800 dark:text-gray-200">delevery price: {total}</h1>
-                <h1 className="text-gray-800 dark:text-gray-200">Total price: {(total ?? 0) * 5}</h1>
-              </div>
-            </div>
-            <Button title="Order Now" className="hover:text-white hover:bg-black/95 duration-300 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-900 w-full rounded-full my-5" />
-          </form>
+          <OrderForm
+            pro={pro}
+            increment={increment}
+            decrement={decrement}
+            quantity={quantity}
+            total={total??0}
+            />
         </div>
         <Divider className="my-5" />
         {/* rates */}
-        <h1 className="text-xl font-semibold text-gray-400 dark:text-gray-200"></h1>
         <section className="border-dashed border-2 border-gray-500 p-3 rounded-md">
           <h1 className="text-gray-400 text-xl mb-5">Please Rate This Product😊:</h1>
           <form onSubmit={handleSubmit2(addRate)}>
@@ -294,15 +209,7 @@ const ProDetails = () => {
         </section>
         <Comments id={pro?.id ?? ""} />
       </div>
-      {
-        isOpen && <Modal isOpen={isOpen} onClose={onClose} insideClick={true} btnClose={true}>
-          <div className="w-[33rem] md:min-w-[30rem] flex flex-col justify-center items-center p-5 pb-10 gap-4">
-            <h1 className="text-2xl font-semibold text-gray-600 dark:text-gray-200 text-center">Order Success 🥰🎉</h1>
-            <p className="dark:text-gray-300 text-gray-700 text-base">please rate this product if you like it or want to give feedback 😉</p>
-            <p className="dark:text-gray-300 text-gray-700 text-base italic">if you have any questions, please <a href="" className="underline">contact us</a></p>
-          </div>
-        </Modal>
-      }
+      
     </main>
   );
 };

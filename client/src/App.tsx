@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // pages
-import { Home, ProDetails, Store, UserLayout, Login , CartPage } from "./pages";
+import { Home, ProDetails, Store, UserLayout, Login , Checkout } from "./pages";
 import { ErrorPage } from "./containers";
 import Layout from "./admin/layout";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,7 +24,7 @@ const App = () => {
             <Route path="/store" element={<Store />} />
             <Route path="/product/:id" element={<ProDetails />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/cart" element={<CartPage />} />
+            <Route path="/cart" element={<Checkout />} />
             <Route path="*" element={<ErrorPage text="Page Not Found :(" />} />
           </Route>
 

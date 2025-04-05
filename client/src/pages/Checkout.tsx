@@ -5,19 +5,29 @@ import { removeFromCart, updateQuantity, clearCart } from "../store/cartSlice";
 import { IoIosAdd } from "react-icons/io";
 import { CiTrash } from "react-icons/ci";
 import { RiResetLeftFill } from "react-icons/ri";
-import { Divider } from "../components";
+import { Divider, Inputs } from "../components";
+import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { OrderForm } from "../containers";
+import { useState } from "react";
 
-const CartPage = () => {
+
+const Checkout = () => {
     const dispatch = useDispatch();
     const { cartItems, totalQuantity, totalPrice } = useSelector((state: RootState) => state.cart);
+    console.log(cartItems.map((item: any) => item.id))
+
     return (
-        <section className='w-full h-full min-h-screen'>
-            <div className="w-1/2 ml-10 mt-5 border-2 border-dashed border-gray-400 rounded-lg p-2 px-5 flex flex-col">
+        <section className='w-full h-full min-h-screen flex md:flex-row flex-col gap-4 p-5'>
+            <div className="w-1/2 ml-10 mt-5 border-2 border-dashed border-gray-400 rounded-lg p-2 px-5 flex flex-col min-h-[80vh] max-h-[100vh] ">
                 {cartItems.length === 0 ? (
-                    <p className="text-gray-500 text-center my-4">The cart is empty</p>
+                    <div className="flex flex-col items-center justify-center min-h-[70vh] w-full ">
+                        <MdOutlineProductionQuantityLimits className="text-6xl text-gray-400" />
+                        <p className="text-gray-500 text-center my-4">The cart is empty</p>
+                    </div>
                 ) : (
-                    <>
-                        <ul>
+                    <div className="flex flex-col gap-y-4">
+                        <ul className="flex flex-col gap-y-4 max-h-[70vh] min-h-[70vh] overflow-y-auto p-2 rounded-lg">
+                            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-200">Your Cart</h1>
                             {cartItems.map((item) => (
                                 <>
                                     <li key={item.id} className="flex justify-between items-center py-2">
@@ -43,22 +53,36 @@ const CartPage = () => {
                                 </>
                             ))}
                         </ul>
-                        <div className="flex justify-evenly mt-5">
-                            <p className="text-base dark:text-gray-300">Total quantity: {totalQuantity}</p>
-                            <h3 className="text-base dark:text-gray-300 mb-2">Total price: {totalPrice} DZD</h3>
+                        <div className="flex flex-col gap-y-4 mt-5">
+                            <div className="flex justify-evenly mt-5">
+                                <p className="text-base dark:text-gray-300">Total quantity: {totalQuantity}</p>
+                                <h3 className="text-base dark:text-gray-300 mb-2">Total price: {totalPrice} DZD</h3>
+                            </div>
+                            <button className="w-20 text-gray-900 bg-gray-100 cursor-pointer rounded-lg self-end border p-1 border-gray-600 flex items-center justify-center"
+                                onClick={() => dispatch(clearCart())}>
+                                Reset
+                                <RiResetLeftFill
+                                />
+                            </button>
                         </div>
-                        <button className="w-20 text-gray-900 bg-gray-100 cursor-pointer rounded-lg self-end border p-1 border-gray-600 flex items-center justify-center"
-                            onClick={() => dispatch(clearCart())}>
-                            Reset
-                            <RiResetLeftFill
-                            />
-                        </button>
-                    </>
+                    </div>
                 )}
+            </div>
+
+            <div className="w-1/2 h-fit  flex flex-col border-2 border-dashed border-gray-400 rounded-lg ml-10 mt-5 gap-4 p-5">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">Checkout</h1>
+
+                <OrderForm
+                    pro={cartItems}
+                    quantity={totalQuantity}
+                    total={totalQuantity * totalPrice}
+                    handleQuantity={false}
+                />
+
             </div>
 
         </section>
     )
 }
 
-export default CartPage;
+export default Checkout;

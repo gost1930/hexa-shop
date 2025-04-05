@@ -6,6 +6,7 @@ import { AiOutlineShoppingCart, AiOutlineProduct } from "react-icons/ai";
 import { IoPricetagOutline } from "react-icons/io5";
 import { FiUpload } from "react-icons/fi";
 import useFetch from "../../../hooks/useFetch";
+import { errorAlert, successAlert } from "../../../utils/toast";
 
 interface Props {
     isOpen: any;
@@ -108,7 +109,9 @@ const AddProduct: React.FC<Props> = ({ isOpen, onClose, type, id, isSuccess, set
             });
 
             const result = await response.json();
-
+            if (response.status === 400) {
+                return errorAlert(result.message)
+            }
             if (response.ok) {
                 console.log(`Product ${type === "add" ? "added" : "updated"} successfully:`, result);
                 reset();
@@ -116,12 +119,13 @@ const AddProduct: React.FC<Props> = ({ isOpen, onClose, type, id, isSuccess, set
                 setImgUrl([]);
                 onClose();
                 setIsSuccess(!isSuccess);
+                successAlert("Product created successfuly")
                 window.location.reload();
-
-
             } else {
+                errorAlert("something wrong!?")
                 console.error(`Error ${type === "add" ? "adding" : "updating"} product:`, result);
             }
+
         } catch (error) {
             console.error("Request failed:", error);
         }

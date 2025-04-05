@@ -21,8 +21,8 @@ const CategorieSection: React.FC<Prop> = ({ title, subTitle, catName, type }) =>
     console.log("data :", data?.data)
 
     if (loading) return <Spiner />;
+    if (!data?.data || data?.data.length <= 1) return ;
     if (error) return <ErrorPage text={error} />;
-    if (!data?.data || data?.data.length <= 1) return <NoDataPage />;
     return (
         <section className="mx-5 md:mx-40 my-20 -w-full">
             <h1 className="text-black/95 dark:text-gray-100 text-4xl font-bold">{title}</h1>

@@ -17,6 +17,9 @@
     border: var(--black) ;
 }
 
+/* hidden scrollbar */
+
+
 ::-webkit-scrollbar {
     width: 10px;
   }
