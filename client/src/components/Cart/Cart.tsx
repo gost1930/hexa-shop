@@ -57,7 +57,7 @@ const CartComponent: React.FC = () => {
               <RiResetLeftFill
               />
             </button>
-            <Link to="/cart" className="w-1/2 text-gray-900 bg-gray-100 cursor-pointer rounded-r-full border p-1 border-gray-600 flex items-center justify-center">
+            <Link to="/checkout" className="w-1/2 text-gray-900 bg-gray-100 cursor-pointer rounded-r-full border p-1 border-gray-600 flex items-center justify-center">
               Order Now
             </Link>
           </div>

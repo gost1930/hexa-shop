@@ -1,6 +1,6 @@
 // img import
 // ui comp
-import Button from "./Button";
+import BtnLink from "./BtnLink";
 
 const CategoriesCard = ({ name , img }: { name: string , img: string }) => {
     return (
@@ -18,7 +18,7 @@ const CategoriesCard = ({ name , img }: { name: string , img: string }) => {
             justify-center bg-[#2a2a2a]/90 duration-300 gap-y-6">
                 <h1 className="text-white text-3xl font-bold">Women</h1>
                 <p className="text-center text-white">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit, quas.</p>
-                <Button title="Discover More" />
+                <BtnLink path={"/category/"+ name.toLocaleLowerCase()} title="Shop Now" />
             </div>
 
         </div>

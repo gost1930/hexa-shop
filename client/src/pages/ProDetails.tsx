@@ -5,15 +5,15 @@ import { useForm } from "react-hook-form";
 import { FaStar } from "react-icons/fa6";
 import { FaQuoteLeft } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
-import { MdOutlinePhoneInTalk } from "react-icons/md";
+// import { MdOutlinePhoneInTalk } from "react-icons/md";
 // Ui comp
 import { Divider, Button, Inputs, StarRating } from "../components";
 // containers
 import { Spiner, ErrorPage, OrderForm, Comments } from "../containers";
 // custom hooks
 import useFetch from "../hooks/useFetch";
-import { Modal } from "../admin/components";
-import { useDisCloser } from "../hooks";
+// import { Modal } from "../admin/components";
+// import { useDisCloser } from "../hooks";
 import { successAlert } from "../utils/toast";
 
 interface Product {

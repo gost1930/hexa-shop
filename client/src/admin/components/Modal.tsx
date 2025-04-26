@@ -1,8 +1,6 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import clsx from "clsx";
-
-// (1) استيراد السياق إذا كنت تستخدم `context` لإدارة الدارك مود
 import { useTheme } from "../../context/ThemeProvider";
 
 interface ModalProps {

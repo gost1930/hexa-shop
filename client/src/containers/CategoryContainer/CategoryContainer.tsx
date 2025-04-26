@@ -1,18 +1,17 @@
-import React, { useEffect } from 'react'
 // img
 import img from "../../assets/left-banner-image.jpg"
 // components
-import { CategoriesCard, Button } from "../../components";
+import { CategoriesCard, BtnLink } from "../../components";
 import useFetch from '../../hooks/useFetch';
 import Spiner from '../ErrorPages/Spiner';
 import NoDataPage from '../ErrorPages/NoDataPage';
 import ErrorPage from '../ErrorPages/ErrorPage';
-import { Link } from 'react-router-dom';
+
 const CategoryContainer = () => {
     const { data: dataCategory, loading: loadingCategory, error: errorCategory } = useFetch("category", "GET");
 
 
-    
+
     return (
         <section className="flex flex-col md:flex-row gap-4 pt-12 px-6 h-fit">
 

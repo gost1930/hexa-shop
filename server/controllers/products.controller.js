@@ -117,32 +117,73 @@ const getProductByCategoryId = async (req, res) => {
 
 const getProductByCategoryName = async (req, res) => {
     const { categoryName } = req.params;
+    const { page = 1, limit = 20 } = req.query;
+    let { name } = req.query;
+    name = name?.replace(/[-_]/g, " ");
 
     if (!categoryName) {
-        return res.status(400).json({ message: "Category is required" });
+        return res.status(400).json({ message: "اسم التصنيف مطلوب." });
     }
 
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const take = parseInt(limit);
+
     try {
-        const products = await prisma.product.findMany({
-            where: {
-                category: {
-                    name: categoryName, // Correctly filter products by category name
-                },
-            },
+        const category = await prisma.category.findUnique({
+            where: { name: categoryName },
         });
 
-        if (!products || products.length === 0) {
-            return res.status(404).json({ message: "No products found with this category name" });
+        if (!category) {
+            return res.status(404).json({ message: "التصنيف غير موجود." });
+        }
+
+        const whereCondition = {
+            category: {
+                is: {
+                    name: categoryName,
+                },
+            },
+            ...(name && {
+                name: {
+                    contains: name,
+                    mode: "insensitive",
+                },
+            }),
+        };
+
+        const [products, total] = await Promise.all([
+            prisma.product.findMany({
+                where: whereCondition,
+                skip,
+                take,
+                include: {
+                    category: {
+                        select: { name: true },
+                    },
+                },
+            }),
+            prisma.product.count({
+                where: whereCondition,
+            }),
+        ]);
+
+        if (products.length === 0) {
+            return res.status(404).json({ message: "لم يتم العثور على منتجات لهذا التصنيف." });
         }
 
         res.status(200).json({
-            message: `Products with category name ${categoryName} fetched successfully`,
-            data: products, // Send the fetched products in the response
+            message: `تم جلب المنتجات لتصنيف "${categoryName}" بنجاح.`,
+            products,
+            total,
+            currentPage: parseInt(page),
+            totalPages: Math.ceil(total / take),
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "حدث خطأ في الخادم.", error: error.message });
     }
 };
+
+
 
 
 const getProductByName = async (req, res) => {

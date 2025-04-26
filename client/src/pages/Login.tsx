@@ -21,6 +21,7 @@ const Login = () => {
     userData
   );
   console.log(resData?.user.id)
+
   const onSubmit = (data: any) => {
     // console.log(data);
     setUserData(data);
@@ -28,7 +29,6 @@ const Login = () => {
   };
   useEffect(() => {
     if (resData) {
-      console.log("Login successful:", resData.token);
       setErrorMessage("");
       setTriggerFetch(false);
       window.localStorage.setItem("userId", resData?.user.id);

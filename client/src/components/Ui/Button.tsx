@@ -1,4 +1,3 @@
-import React from 'react'
 
 const Button = ({ className, title, onClick }: { className?: string, title: string | any, onClick?: any }) => {
     return (

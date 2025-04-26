@@ -3,7 +3,6 @@ import img2 from "../assets/men-02.jpg";
 import img3 from "../assets/men-03.jpg";
 import img4 from "../assets/women-01.jpg";
 import img5 from "../assets/women-02.jpg";
-import img6 from "../assets/women-03.jpg";
 
 const fakeData = [
     {
