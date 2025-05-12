@@ -84,6 +84,19 @@ const getProductById = async (req, res) => {
             where: {
                 id: id
             },
+            include: {
+                category: {
+                    select: {
+                        name: true
+                    }
+                },
+                rate:{
+                    select: {
+                        rate: true,
+                        review: true
+                    }
+                }
+            }
         });
         res.status(200).send({
             message: "Product fetched successfully",
@@ -195,7 +208,16 @@ const getProductByName = async (req, res) => {
         }
         // replace - or _ with space
         name = name.replace(/[-_]/g, " ");
-
+        const rate = await prisma.product.findUnique({
+            where: { name },
+            include: {
+                rate: {
+                    select: {
+                        rate: true,
+                    }
+                }
+            }
+        });
         const product = await prisma.product.findUnique({
             where: { name },
             include: {
@@ -213,7 +235,10 @@ const getProductByName = async (req, res) => {
 
         res.status(200).send({
             message: `Product with name ${name} fetched successfully`,
-            product
+            product: {
+                ...product,
+                rate: +(rate.rate.reduce((a, b) => a + b.rate, 0) / rate.rate.length).toFixed()
+            }
         });
     } catch (error) {
         res.status(500).json({ message: error.message });

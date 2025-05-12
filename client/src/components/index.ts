@@ -11,6 +11,7 @@ export { default as Inputs } from "./Ui/Inputs";
 export { default as ToggleSwitch } from "./Ui/ToggleSwitch";
 export { default as StarRating } from "./Ui/StarRating";
 export { default as BtnLink } from "./Ui/BtnLink";
+export { default as Editor } from "./Ui/Editor";
 
 export { default as Table } from "./Table/Table";
 export { default as LineChart } from "./Chart/LineChart";

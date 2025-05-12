@@ -41,6 +41,11 @@
     background-size: 400% 100%;
     animation: gradient 1.5s ease infinite;
 }
+@theme inline{
+    --color-primary: #f1e1ca;
+    --color-black: #967c65;
+    --color-tertiary: #ff6b6b;
+}
 
 @keyframes gradient {
     0% {
@@ -50,3 +55,78 @@
         background-position: 0 0;
     }
 }
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.custom-editor-heading1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 1rem 0;
+  }
+  .custom-editor-heading2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0.75rem 0;
+  }
+  .custom-editor-paragraph {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+  }
+  .custom-editor-list {
+    list-style-type: disc;
+    margin: 0.5rem 0;
+    padding-right: 1.5rem;
+  }
+  .custom-editor-list-item {
+    margin: 0.25rem 0;
+  }
+  .custom-editor-bold {
+    font-weight: bold;
+  }
+  .custom-editor-italic {
+    font-style: italic;
+  }
+  .custom-editor-content {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .custom-editor-content p {
+    margin: 0.5rem 0;
+  }
+  
+  .custom-editor-content ul {
+    list-style-type: disc;
+    margin: 0.5rem 0;
+    padding-right: 1.5rem;
+  }
+  
+  .custom-editor-content li {
+    margin: 0.25rem 0;
+  }
+  
+  .custom-editor-content strong {
+    font-weight: bold;
+  }
+  
+  .custom-editor-content em {
+    font-style: italic;
+  }
+
+  .custom-editor-content h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 1rem 0;
+  }
+  
+  .custom-editor-content h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0.75rem 0;
+  }

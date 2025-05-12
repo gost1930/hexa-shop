@@ -12,6 +12,7 @@ const StarRating = ({ totalStars = 5, setRating, rating }: { totalStars?: number
         return (
           <button
             key={index}
+            type="button"
             className="peer bg-transparent border-none outline-none h-fit"
             onClick={() => setRating(starValue)}
             onMouseEnter={() => setHover(starValue)}

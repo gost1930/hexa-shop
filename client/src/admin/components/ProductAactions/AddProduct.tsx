@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Modal } from "..";
-import { Inputs } from "../../../components";
+import { Editor, Inputs } from "../../../components";
 import { AiOutlineShoppingCart, AiOutlineProduct } from "react-icons/ai";
 import { IoPricetagOutline } from "react-icons/io5";
 import { FiUpload } from "react-icons/fi";
@@ -191,6 +191,7 @@ const AddProduct: React.FC<Props> = ({ isOpen, onClose, type, id, isSuccess, set
                         </div>
                     </div>
                 </div>
+                <Editor />
                 <Button className="mt-12 border rounded-full w-full justify-center hover:bg-black/90 hover:text-white" title={type === "add" ? "Add Product" : "Update Product"} icon={<AiOutlineShoppingCart />} type="submit" />
             </form>
         </Modal>

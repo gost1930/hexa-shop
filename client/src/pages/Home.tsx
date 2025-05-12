@@ -2,7 +2,7 @@ import { CategoryContainer, CategorieSection } from "../containers";
 import { Divider } from "../components";
 const Home = () => {
     return (
-        <main className="min-h-screen dark:bg-gray-800">
+        <main className="min-h-screen bg-primary/50 dark:bg-gray-800">
             <CategoryContainer />
             <CategorieSection
             type="mens" 

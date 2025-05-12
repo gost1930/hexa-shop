@@ -41,7 +41,6 @@ const createCategory = async (req, res) => {
             return res.status(400).json({ message: "User and name are required" });
         }
 
-        // التحقق مما إذا كان المستخدم موجودًا
         const userExist = await prisma.user.findUnique({
             where: { id: user }
         });
@@ -50,7 +49,6 @@ const createCategory = async (req, res) => {
             return res.status(400).json({ message: "User not found" });
         }
 
-        // إنشاء الفئة
         const category = await prisma.category.create({
             data: {
                 user: { connect: { id: user } },
@@ -61,8 +59,8 @@ const createCategory = async (req, res) => {
 
         return res.status(201).json(category);
     } catch (error) {
-        console.error("خطأ أثناء إنشاء الفئة:", error);
-        return res.status(500).json({ message: "خطأ داخلي في السيرفر" });
+        console.error("Error creating category:", error);
+        return res.status(500).json({ message: error.message });
     }
 };
 

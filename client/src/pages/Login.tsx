@@ -8,14 +8,14 @@ import { FaRegUser } from "react-icons/fa";
 import useFetch from "../hooks/useFetch";
 import { Navigate } from "react-router-dom";
 
+
 const Login = () => {
   const [userData, setUserData] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [triggerFetch, setTriggerFetch] = useState(false)
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<FethProps>();
 
-
-  const { data: resData, loading, error } = useFetch(
+  const { data:  resData, loading, error } = useFetch(
     triggerFetch ? "user/login" : "",
     "POST",
     userData

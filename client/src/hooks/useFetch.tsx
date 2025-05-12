@@ -1,5 +1,5 @@
+// import { t } from "i18next";
 import { useState, useEffect, useCallback } from "react";
-
 const useFetch = (url: string, method: string, body?: any) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);

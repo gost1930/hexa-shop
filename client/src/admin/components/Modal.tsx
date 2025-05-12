@@ -29,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, insideClick, children, b
         >
             <div
                 className={clsx(
-                    "pt-10 px-4 pb-3 w-fit md:max-w-[80%] rounded relative shadow-md transition-colors duration-300",
+                    "pt-10 px-4 pb-3 w-fit md:max-w-[80%] rounded relative shadow-md transition-colors duration-300 overflow-y-scroll h-auto max-h-[90%] overflow-x-hidden",
                     isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
                 )}
             >
